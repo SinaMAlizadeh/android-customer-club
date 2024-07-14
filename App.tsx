@@ -11,6 +11,7 @@ import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppNavigator from './screens/AppNavigator';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -55,7 +56,11 @@ const App: React.FC = () => {
   //   // initializeFCM();
   // }, []);
 
-  return <AppNavigator />;
+  return (
+    <SafeAreaProvider>
+      <AppNavigator />
+    </SafeAreaProvider>
+  );
 };
 const styles = StyleSheet.create({
   sectionContainer: {

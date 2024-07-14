@@ -14,18 +14,19 @@ type Props = {
 };
 
 const LoginScreen: React.FC<Props> = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://yourserver.com/api/login', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'http://130.185.78.214:5000/gateway/auth/Authenticate/SignInOtp',
+        {
+          phoneNumber,
+        },
+      );
       const {token, fcmToken} = response.data;
       // Save token and navigate to WebView
-      navigation.navigate('WebView', {token, fcmToken});
+      //navigation.navigate('WebView', {token, fcmToken});
     } catch (error) {
       console.error('Login failed', error);
     }
@@ -34,13 +35,12 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
   return (
     <View>
       <Text>Login</Text>
-      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
       <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
+        placeholder="phoneNumber"
+        value={phoneNumber}
+        onChangeText={setPhoneNumber}
       />
+
       <Button title="Login" onPress={handleLogin} />
     </View>
   );
