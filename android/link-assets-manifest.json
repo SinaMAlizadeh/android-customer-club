@@ -1,0 +1,45 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/iranSans/eot/IRANSansMobileFaNum.eot",
+      "sha1": "edf52b256c75db4e77b8b14c8808ce13b03deb1e"
+    },
+    {
+      "path": "assets/fonts/iranSans/eot/IRANSansWebFaNum_Bold.eot",
+      "sha1": "a4908be043a69f051e6376fec6d80a654fc570b6"
+    },
+    {
+      "path": "assets/fonts/iranSans/fontiran.scss",
+      "sha1": "3f1a0b8c9996b79cc439f0b34214128bbb1b28db"
+    },
+    {
+      "path": "assets/fonts/iranSans/ttf/IRANSansMobileFaNum.ttf",
+      "sha1": "7307a575d6dd089e5717a6ad566150398f0c14cf"
+    },
+    {
+      "path": "assets/fonts/iranSans/ttf/IRANSansWebFaNum_Bold.ttf",
+      "sha1": "76e54e3061e126f5a46fa62e6afe81a18c429d5f"
+    },
+    {
+      "path": "assets/fonts/iranSans/woff/IRANSansMobileFaNum.woff",
+      "sha1": "fa5668575b6258c7570b62b41eb123f06c481f0a"
+    },
+    {
+      "path": "assets/fonts/iranSans/woff/IRANSansWebFaNum_Bold.woff",
+      "sha1": "0ee6958e64676073b5ccb2471f4207788374ff0b"
+    },
+    {
+      "path": "assets/fonts/iranSans/woff2/IRANSansMobileFaNum.woff2",
+      "sha1": "d537b4b62c4da3fb8f4512f876949de492cf7edc"
+    },
+    {
+      "path": "assets/fonts/iranSans/woff2/IRANSansWebFaNum_Bold.woff2",
+      "sha1": "a5980a14d0b9f7362e8df1293d03a5712f22a916"
+    },
+    {
+      "path": "assets/fonts/IRANSansWebFaNum-Bold.ttf",
+      "sha1": "76e54e3061e126f5a46fa62e6afe81a18c429d5f"
+    }
+  ]
+}
