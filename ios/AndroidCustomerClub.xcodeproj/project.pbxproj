@@ -23,7 +23,7 @@
 		2B8FC7F8FF12445697A704EE /* IRANSansWebFaNum_Bold.woff in Resources */ = {isa = PBXBuildFile; fileRef = B7576E97306049EEADBA3CEE /* IRANSansWebFaNum_Bold.woff */; };
 		2E3844B616F84CE9B621B30A /* IRANSansMobileFaNum.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = 1F723F7F37794927899C0CAF /* IRANSansMobileFaNum.woff2 */; };
 		B61655A7174D4B68B5DE7EB0 /* IRANSansWebFaNum_Bold.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = AAAF389E088E4DF59C4DBEA4 /* IRANSansWebFaNum_Bold.woff2 */; };
-		DD4BFE0FDCFD4AF19616DB1F /* IRANSansWebFaNum-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB80C995E6418FBD646B66 /* IRANSansWebFaNum-Bold.ttf */; };
+		331AA2882C2F4E47AE566353 /* IRANSansMobileFaNum-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D471D250283B4E7599AC2CFB /* IRANSansMobileFaNum-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +64,7 @@
 		B7576E97306049EEADBA3CEE /* IRANSansWebFaNum_Bold.woff */ = {isa = PBXFileReference; name = "IRANSansWebFaNum_Bold.woff"; path = "../assets/fonts/iranSans/woff/IRANSansWebFaNum_Bold.woff"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		1F723F7F37794927899C0CAF /* IRANSansMobileFaNum.woff2 */ = {isa = PBXFileReference; name = "IRANSansMobileFaNum.woff2"; path = "../assets/fonts/iranSans/woff2/IRANSansMobileFaNum.woff2"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		AAAF389E088E4DF59C4DBEA4 /* IRANSansWebFaNum_Bold.woff2 */ = {isa = PBXFileReference; name = "IRANSansWebFaNum_Bold.woff2"; path = "../assets/fonts/iranSans/woff2/IRANSansWebFaNum_Bold.woff2"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2CCB80C995E6418FBD646B66 /* IRANSansWebFaNum-Bold.ttf */ = {isa = PBXFileReference; name = "IRANSansWebFaNum-Bold.ttf"; path = "../assets/fonts/IRANSansWebFaNum-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D471D250283B4E7599AC2CFB /* IRANSansMobileFaNum-Bold.ttf */ = {isa = PBXFileReference; name = "IRANSansMobileFaNum-Bold.ttf"; path = "../assets/fonts/IRANSansMobileFaNum-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,7 +183,7 @@
 				B7576E97306049EEADBA3CEE /* IRANSansWebFaNum_Bold.woff */,
 				1F723F7F37794927899C0CAF /* IRANSansMobileFaNum.woff2 */,
 				AAAF389E088E4DF59C4DBEA4 /* IRANSansWebFaNum_Bold.woff2 */,
-				2CCB80C995E6418FBD646B66 /* IRANSansWebFaNum-Bold.ttf */,
+				D471D250283B4E7599AC2CFB /* IRANSansMobileFaNum-Bold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -293,7 +293,7 @@
 				2B8FC7F8FF12445697A704EE /* IRANSansWebFaNum_Bold.woff in Resources */,
 				2E3844B616F84CE9B621B30A /* IRANSansMobileFaNum.woff2 in Resources */,
 				B61655A7174D4B68B5DE7EB0 /* IRANSansWebFaNum_Bold.woff2 in Resources */,
-				DD4BFE0FDCFD4AF19616DB1F /* IRANSansWebFaNum-Bold.ttf in Resources */,
+				331AA2882C2F4E47AE566353 /* IRANSansMobileFaNum-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

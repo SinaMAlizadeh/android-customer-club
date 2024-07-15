@@ -1,6 +1,13 @@
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
-  CheckOtp: {PhoneNumber: string};
-  WebView: {token: string; fcmToken: string};
+  CheckOtp: {phoneNumber: string};
+  WebView: {token: string};
 };
+
+export enum ContentType {
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
+  Text = 'text/plain',
+}

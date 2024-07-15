@@ -11,7 +11,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Login">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="CheckOtp" component={CheckOtp} />
       <Stack.Screen name="Signup" component={SignupScreen} />

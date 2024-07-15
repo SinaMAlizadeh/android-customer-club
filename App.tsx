@@ -13,6 +13,12 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppNavigator from './screens/AppNavigator';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
+import {I18nManager, Platform} from 'react-native';
+import {configureFonts, MD2LightTheme, PaperProvider} from 'react-native-paper';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+I18nManager.forceRTL(true);
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -43,6 +49,8 @@ type SectionProps = PropsWithChildren<{
 //   );
 // }
 
+const queryClient = new QueryClient();
+
 const App: React.FC = () => {
   // useEffect(() => {
   //   const initializeFCM = async () => {
@@ -56,9 +64,40 @@ const App: React.FC = () => {
   //   // initializeFCM();
   // }, []);
 
+  const fontConfig = {
+    android: {
+      regular: {
+        fontFamily: 'IRANSansMobileFaNum',
+        fontWeight: 'normal',
+      },
+      medium: {
+        fontFamily: 'IRANSansMobileFaNum',
+        fontWeight: 'normal',
+      },
+      light: {
+        fontFamily: 'IRANSansMobileFaNum',
+        fontWeight: 'normal',
+      },
+      thin: {
+        fontFamily: 'IRANSansMobileFaNum',
+        fontWeight: 'normal',
+      },
+    },
+  };
+
+  const theme = {
+    ...MD2LightTheme,
+    // @ts-ignore
+    fonts: configureFonts({config: fontConfig, isV3: false}),
+  };
+
   return (
     <SafeAreaProvider>
-      <AppNavigator />
+      <PaperProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <AppNavigator />
+        </QueryClientProvider>
+      </PaperProvider>
     </SafeAreaProvider>
   );
 };
