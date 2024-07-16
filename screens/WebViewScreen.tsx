@@ -1,17 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {WebView, WebViewNavigation} from 'react-native-webview';
-import {RouteProp} from '@react-navigation/native';
+import {
+  WebView,
+  WebViewMessageEvent,
+  WebViewNavigation,
+} from 'react-native-webview';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../type';
 import {BackHandler, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Text} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type WebViewScreenRouteProp = RouteProp<RootStackParamList, 'WebView'>;
+type WebViewScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'WebView'
+>;
 
 type Props = {
   route: WebViewScreenRouteProp;
+  navigation: WebViewScreenNavigationProp;
 };
 
-const WebViewScreen: React.FC<Props> = ({route}) => {
+const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   const {token} = route.params;
   const url = `http://130.185.78.214/auth/login?token=${token}&platform=android`;
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
@@ -31,7 +42,7 @@ const WebViewScreen: React.FC<Props> = ({route}) => {
         webviewRef.current.goBack();
         return true;
       }
-      return false;
+      return true;
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -46,6 +57,20 @@ const WebViewScreen: React.FC<Props> = ({route}) => {
     setCanGoBack(navState.canGoBack);
   };
 
+  const onMessage = async (event: WebViewMessageEvent) => {
+    if (event.nativeEvent.data === 'logout') {
+      // Navigate to the logout page
+      await AsyncStorage.removeItem('token');
+      navigation.navigate('Login');
+    }
+  };
+
+  const injectedJavaScript = `
+    document.addEventListener('logout', function() {
+      window.ReactNativeWebView.postMessage('logout');
+    });
+  `;
+
   return (
     <WebView
       ref={webviewRef}
@@ -55,7 +80,9 @@ const WebViewScreen: React.FC<Props> = ({route}) => {
       javaScriptEnabled={true}
       domStorageEnabled={true}
       style={styles.flex}
+      onMessage={onMessage}
       onNavigationStateChange={onNavigationStateChange}
+      injectedJavaScript={injectedJavaScript}
     />
   );
 };

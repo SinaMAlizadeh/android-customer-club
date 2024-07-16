@@ -1,10 +1,12 @@
-import {useMutation} from '@tanstack/react-query';
-import authService from '..';
-import {loginPayload, verifyOtpPayload} from '../type';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../../type';
-import {ToastAndroid} from 'react-native';
+import {useMutation} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
+import {ToastAndroid} from 'react-native';
+import authService from '..';
+import {RootStackParamList} from '../../../type';
+import {verifyOtpPayload} from '../type';
+
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'CheckOtp'
@@ -19,7 +21,8 @@ function useVerifyCode({navigation}: Props) {
     mutationFn: (command: verifyOtpPayload) => {
       return authService.checkOtp(command);
     },
-    onSuccess: data => {
+    onSuccess: async data => {
+      await AsyncStorage.setItem('token', data?.data?.accessToken);
       navigation.navigate('WebView', {
         token: data?.data?.accessToken,
       });

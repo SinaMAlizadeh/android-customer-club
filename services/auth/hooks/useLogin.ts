@@ -10,8 +10,13 @@ type LoginScreenNavigationProp = StackNavigationProp<
   'Login'
 >;
 
+type VerificationCodeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'CheckOtp'
+>;
+
 type Props = {
-  navigation: LoginScreenNavigationProp;
+  navigation: LoginScreenNavigationProp | VerificationCodeScreenNavigationProp;
 };
 
 function useMutateSignIn({navigation}: Props) {

@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import axios from 'axios';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../type';
 import {Controller, useForm} from 'react-hook-form';
 
-import {Button, Text, TextInput} from 'react-native-paper';
+import {ActivityIndicator, Button, Text, TextInput} from 'react-native-paper';
 import {loginPayload} from '../services/auth/type';
 import useMutateSignIn from '../services/auth/hooks/useLogin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,6 +20,8 @@ type Props = {
 };
 
 const LoginScreen: React.FC<Props> = ({navigation}) => {
+  const [loading, setLoading] = useState<boolean>(true);
+
   const {
     control,
     handleSubmit,
@@ -31,6 +34,18 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
     mutate({...values});
   };
 
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        navigation.replace('WebView', {token}); // Navigate to WebViewScreen
+      } else {
+        setLoading(false);
+      }
+    };
+    checkToken();
+  }, [navigation]);
+
   const validatePhoneNumber = (value: string) => {
     const iranPhoneNumberRegex = /^(\+98|0)?9\d{9}$/;
     return (
@@ -38,6 +53,13 @@ const LoginScreen: React.FC<Props> = ({navigation}) => {
       'شماره تلفن همراه را به درستی وارد نمایید'
     );
   };
+
+  if (loading)
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator style={{paddingTop: 20}} animating={true} />
+      </View>
+    );
 
   return (
     <View style={styles.container}>
