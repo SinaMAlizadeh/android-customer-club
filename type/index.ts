@@ -2,7 +2,7 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   CheckOtp: {phoneNumber: string};
-  WebView: {token: string};
+  WebView: undefined;
 };
 
 export enum ContentType {

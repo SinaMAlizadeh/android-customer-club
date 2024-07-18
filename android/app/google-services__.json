@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234162428578",
+    "project_id": "customer-club-e2bd3",
+    "storage_bucket": "customer-club-e2bd3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234162428578:android:98e1fc36cde68858c6d5fb",
+        "android_client_info": {
+          "package_name": "com.androidcustomerclub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzhySRXJyCStR03FwJvjG1lyWk0Ie1SCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

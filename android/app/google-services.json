@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "110233236778",
+    "project_id": "marketplace-fe5a1",
+    "storage_bucket": "marketplace-fe5a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110233236778:android:6491b6c7716e07fe0fda53",
+        "android_client_info": {
+          "package_name": "com.androidcustomerclub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxAjjh6EAIpUXjyfTNhr7Z-VQ7UKOdywo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110233236778:android:d94a0f95094e16980fda53",
+        "android_client_info": {
+          "package_name": "ir.marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxAjjh6EAIpUXjyfTNhr7Z-VQ7UKOdywo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,7 @@ import {BackHandler, StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Text} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 type WebViewScreenRouteProp = RouteProp<RootStackParamList, 'WebView'>;
 type WebViewScreenNavigationProp = StackNavigationProp<
@@ -23,8 +24,8 @@ type Props = {
 };
 
 const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
-  const {token} = route.params;
-  const url = `http://130.185.78.214/auth/login?token=${token}&platform=android`;
+  // const {token} = route.params;
+  const url = `http://130.185.78.214/auth/login?platform=android`;
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webviewRef = useRef<WebView>(null);
 
@@ -70,6 +71,29 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
       window.ReactNativeWebView.postMessage('logout');
     });
   `;
+
+  useEffect(() => {
+    const requestUserPermission = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
+    };
+
+    const getToken = async () => {
+      const fcmToken = await messaging().getToken();
+      if (fcmToken) {
+        console.log('Your Firebase Cloud Messaging Token:', fcmToken);
+      } else {
+        console.log('Failed to get FCM token');
+      }
+    };
+    requestUserPermission();
+    getToken();
+  }, []);
 
   return (
     <WebView

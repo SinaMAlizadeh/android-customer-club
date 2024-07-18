@@ -15,7 +15,7 @@ const AppNavigator: React.FC = () => (
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Login">
+      initialRouteName="WebView">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="CheckOtp" component={CheckOtp} />
       <Stack.Screen name="Signup" component={SignupScreen} />
