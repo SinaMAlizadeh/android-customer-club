@@ -11,6 +11,7 @@ import {ActivityIndicator, Text} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
+import {getUniqueId, getManufacturer} from 'react-native-device-info';
 
 type WebViewScreenRouteProp = RouteProp<RootStackParamList, 'WebView'>;
 type WebViewScreenNavigationProp = StackNavigationProp<
@@ -25,9 +26,11 @@ type Props = {
 
 const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   // const {token} = route.params;
-  const url = `http://130.185.78.214/auth/login?platform=android`;
+
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webviewRef = useRef<WebView>(null);
+  const [imie, setImie] = useState<string>();
+  const [fcm, setFcm] = useState<string>();
 
   const LoadingIndicatorView = () => {
     return (
@@ -86,6 +89,7 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     const getToken = async () => {
       const fcmToken = await messaging().getToken();
       if (fcmToken) {
+        setFcm(fcmToken);
         console.log('Your Firebase Cloud Messaging Token:', fcmToken);
       } else {
         console.log('Failed to get FCM token');
@@ -95,19 +99,32 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     getToken();
   }, []);
 
+  getUniqueId().then(uniqueId => {
+    // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
+    // Android: "dd96dec43fb81c97"
+    // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
+    console.log(uniqueId);
+    setImie(uniqueId);
+  });
+
+  const url = `http://130.185.78.214/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
   return (
-    <WebView
-      ref={webviewRef}
-      source={{uri: url}}
-      startInLoadingState={true}
-      renderLoading={LoadingIndicatorView}
-      javaScriptEnabled={true}
-      domStorageEnabled={true}
-      style={styles.flex}
-      onMessage={onMessage}
-      onNavigationStateChange={onNavigationStateChange}
-      injectedJavaScript={injectedJavaScript}
-    />
+    <>
+      <Text>{imie}</Text>
+      <Text>{fcm}</Text>
+      <WebView
+        ref={webviewRef}
+        source={{uri: url}}
+        startInLoadingState={true}
+        renderLoading={LoadingIndicatorView}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        style={styles.flex}
+        onMessage={onMessage}
+        onNavigationStateChange={onNavigationStateChange}
+        injectedJavaScript={injectedJavaScript}
+      />
+    </>
   );
 };
 
