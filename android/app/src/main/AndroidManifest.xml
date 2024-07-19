@@ -19,9 +19,9 @@
         android:allowBackup="false"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-         <meta-data
-    android:name="com.google.firebase.messaging.default_notification_icon"
-    android:resource="@drawable/ic_notification_icon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification_icon" />
 
         <activity
             android:name=".MainActivity"
