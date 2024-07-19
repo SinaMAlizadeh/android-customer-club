@@ -16,6 +16,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {I18nManager, Platform} from 'react-native';
 import {configureFonts, MD2LightTheme, PaperProvider} from 'react-native-paper';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import messaging from '@react-native-firebase/messaging';
 
 I18nManager.forceRTL(true);
 
@@ -50,6 +51,10 @@ type SectionProps = PropsWithChildren<{
 // }
 
 const queryClient = new QueryClient();
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
 const App: React.FC = () => {
   // useEffect(() => {
