@@ -79,16 +79,6 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   `;
 
   useEffect(() => {
-    const requestUserPermission = async () => {
-      const authStatus = await messaging().requestPermission();
-      const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-      if (enabled) {
-        console.log('Authorization status:', authStatus);
-      }
-    };
-
     const getToken = async () => {
       try {
         const fcmToken = await messaging().getToken();
@@ -110,28 +100,23 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
       }
     };
 
-    requestUserPermission();
     getToken();
   }, [mutate]);
 
   const url = `http://130.185.78.214/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
   return (
-    <>
-      <Text>{imie}</Text>
-      <Text>{fcm}</Text>
-      <WebView
-        ref={webviewRef}
-        source={{uri: url}}
-        startInLoadingState={true}
-        renderLoading={LoadingIndicatorView}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        style={styles.flex}
-        onMessage={onMessage}
-        onNavigationStateChange={onNavigationStateChange}
-        injectedJavaScript={injectedJavaScript}
-      />
-    </>
+    <WebView
+      ref={webviewRef}
+      source={{uri: url}}
+      startInLoadingState={true}
+      renderLoading={LoadingIndicatorView}
+      javaScriptEnabled={true}
+      domStorageEnabled={true}
+      style={styles.flex}
+      onMessage={onMessage}
+      onNavigationStateChange={onNavigationStateChange}
+      injectedJavaScript={injectedJavaScript}
+    />
   );
 };
 

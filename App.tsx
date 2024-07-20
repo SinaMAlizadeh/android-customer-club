@@ -7,22 +7,17 @@
 
 import type {PropsWithChildren} from 'react';
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AppNavigator from './screens/AppNavigator';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AppNavigator from './screens/AppNavigator';
 
-import {I18nManager, Platform} from 'react-native';
-import {configureFonts, MD2LightTheme, PaperProvider} from 'react-native-paper';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import messaging from '@react-native-firebase/messaging';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {I18nManager, PermissionsAndroid} from 'react-native';
+import {configureFonts, MD2LightTheme, PaperProvider} from 'react-native-paper';
 
 I18nManager.forceRTL(true);
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
 
 // function Section({children, title}: SectionProps): React.JSX.Element {
 //   const isDarkMode = useColorScheme() === 'dark';
@@ -52,22 +47,26 @@ type SectionProps = PropsWithChildren<{
 
 const queryClient = new QueryClient();
 
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 
 const App: React.FC = () => {
-  // useEffect(() => {
-  //   const initializeFCM = async () => {
-  //     // const permissionGranted = await requestUserPermission();
-  //     // if (permissionGranted) {
-  //     //  const token = await getFCMToken();
-  //     // Handle FCM token
-  //     // }
-  //   };
+  useEffect(() => {
+    const requestUserPermission = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
+    };
 
-  //   // initializeFCM();
-  // }, []);
+    requestUserPermission();
+  }, []);
 
   const fontConfig = {
     android: {
