@@ -108,6 +108,9 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     <WebView
       ref={webviewRef}
       source={{uri: url}}
+      cacheEnabled={false}
+      cacheMode="LOAD_NO_CACHE"
+      originWhitelist={['*']}
       startInLoadingState={true}
       renderLoading={LoadingIndicatorView}
       javaScriptEnabled={true}
