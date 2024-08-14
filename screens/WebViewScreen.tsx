@@ -1,18 +1,19 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import LottieView from 'lottie-react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {BackHandler, StyleSheet, View} from 'react-native';
+import {getUniqueId} from 'react-native-device-info';
+import {Text} from 'react-native-paper';
 import {
   WebView,
   WebViewMessageEvent,
   WebViewNavigation,
 } from 'react-native-webview';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../type';
-import {BackHandler, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import {getUniqueId, getManufacturer} from 'react-native-device-info';
 import {useUpdateInfo} from '../services/fcm/hooks/useUpdateInfo';
+import {RootStackParamList} from '../type';
 
 type WebViewScreenRouteProp = RouteProp<RootStackParamList, 'WebView'>;
 type WebViewScreenNavigationProp = StackNavigationProp<
@@ -38,7 +39,15 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   const LoadingIndicatorView = () => {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator style={{paddingTop: 20}} animating={true} />
+        <Text style={styles.loadingHeader}> مشتریه من </Text>
+        <LottieView
+          source={require('../assets/loading.json')}
+          autoPlay
+          loop
+          style={styles.lottie}
+          speed={0.5}
+        />
+        <Text style={styles.loadingText}> در حال بارگزاری اطلاعات</Text>
       </View>
     );
   };
@@ -134,5 +143,17 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loadingHeader: {
+    color: 'black',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  loadingText: {
+    color: 'black',
+  },
+  lottie: {
+    width: 300,
+    height: 300,
   },
 });
