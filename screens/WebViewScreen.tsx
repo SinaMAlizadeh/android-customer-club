@@ -4,7 +4,7 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {BackHandler, StyleSheet, View} from 'react-native';
+import {Alert, BackHandler, Linking, StyleSheet, View} from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
 import {Text} from 'react-native-paper';
 import {
@@ -39,7 +39,6 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   const LoadingIndicatorView = () => {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={styles.loadingHeader}> مشتریه من </Text>
         <LottieView
           source={require('../assets/loading.json')}
           autoPlay
@@ -74,10 +73,11 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   };
 
   const onMessage = async (event: WebViewMessageEvent) => {
-    if (event.nativeEvent.data === 'logout') {
-      // Navigate to the logout page
-      await AsyncStorage.removeItem('token');
-      navigation.navigate('Login');
+    const paymentLink = event.nativeEvent.data;
+    if (paymentLink) {
+      Linking.openURL(paymentLink).catch(err => {
+        Alert.alert('Error', 'Failed to open URL: ' + err.message);
+      });
     }
   };
 
@@ -113,6 +113,7 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
   }, [mutate]);
 
   const url = `http://130.185.78.214/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
+  // const url = `http://localhost:5173/`;
   return (
     <WebView
       ref={webviewRef}
@@ -147,7 +148,6 @@ const styles = StyleSheet.create({
   loadingHeader: {
     color: 'black',
     fontSize: 20,
-    fontWeight: 'bold',
   },
   loadingText: {
     color: 'black',
