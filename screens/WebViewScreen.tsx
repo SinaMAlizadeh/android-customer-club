@@ -1,12 +1,20 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, BackHandler, Linking, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  BackHandler,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+
+import Contacts from 'react-native-contacts'; // Import contacts
 import {getUniqueId} from 'react-native-device-info';
-import {Text} from 'react-native-paper';
 import {
   WebView,
   WebViewMessageEvent,
@@ -27,8 +35,6 @@ type Props = {
 };
 
 const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
-  // const {token} = route.params;
-
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webviewRef = useRef<WebView>(null);
   const [imie, setImie] = useState<string>();
@@ -36,17 +42,17 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
 
   const {mutate} = useUpdateInfo();
 
+  // Function to display loading animation
   const LoadingIndicatorView = () => {
     return (
       <View style={styles.loadingContainer}>
         <LottieView
-          source={require('../assets/loading.json')}
+          source={require('../assets/loading2.json')}
           autoPlay
           loop
           style={styles.lottie}
           speed={0.5}
         />
-        <Text style={styles.loadingText}> در حال بارگزاری اطلاعات</Text>
       </View>
     );
   };
@@ -72,18 +78,89 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     setCanGoBack(navState.canGoBack);
   };
 
+  const requestContactPermission = async (): Promise<boolean> => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+          {
+            title: 'دسترسی دفترچه تلفن',
+            message:
+              'برای نمایش شماره تلفن های موجود در تلفن همراه لطفا دسترسی دفترچه تلفن را بدهید',
+            buttonNeutral: 'بعدا سوال کنید',
+            buttonNegative: 'خیر',
+            buttonPositive: 'دسترسی میدم',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Contacts permission granted');
+          return true;
+        } else {
+          console.log('Contacts permission denied');
+          Alert.alert(
+            'Permission Denied',
+            'Cannot access contacts without permission.',
+          );
+          return false;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true; // iOS automatically handles permissions with the `Contacts` library
+    }
+  };
+
+  const fetchContacts = async () => {
+    const hasPermission = await requestContactPermission();
+    if (hasPermission) {
+      try {
+        const contacts = await Contacts.getAll();
+        const contactInfo = contacts?.map(x => ({
+          firstName: x.givenName,
+          lastName: x.familyName,
+          displayName: x.displayName,
+          phoneNumber: x.phoneNumbers[0]?.number,
+        }));
+        console.log('Contacts:', contactInfo);
+        // Send contacts back to WebView
+        webviewRef.current?.injectJavaScript(`
+          window.handleContacts(${JSON.stringify(contactInfo)});
+        `);
+      } catch (error) {
+        console.log('Error fetching contacts', error);
+      }
+    }
+  };
+
   const onMessage = async (event: WebViewMessageEvent) => {
-    const paymentLink = event.nativeEvent.data;
-    if (paymentLink) {
-      Linking.openURL(paymentLink).catch(err => {
+    const messageData = event.nativeEvent.data;
+
+    if (messageData === 'getContacts') {
+      await fetchContacts();
+    } else {
+      Linking.openURL(messageData).catch(err => {
         Alert.alert('Error', 'Failed to open URL: ' + err.message);
       });
     }
   };
 
+  // JavaScript to inject into the WebView
   const injectedJavaScript = `
     document.addEventListener('logout', function() {
       window.ReactNativeWebView.postMessage('logout');
+    });
+
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'changeRoute') {
+        window.location.href = event.data.route;
+      }
+    });
+
+    // Listen for getContacts event from WebView
+    document.addEventListener('getContacts', function() {
+      window.ReactNativeWebView.postMessage('getContacts');
     });
   `;
 
@@ -94,7 +171,6 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
         if (fcmToken) {
           setFcm(fcmToken);
           const uniqueId = await getUniqueId();
-          console.log(uniqueId);
           setImie(uniqueId);
           mutate({
             imei: uniqueId,
@@ -112,8 +188,8 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     getToken();
   }, [mutate]);
 
-  const url = `http://130.185.78.214/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
-  // const url = `http://localhost:5173/`;
+  const url = `https://app.padix.ir/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
+
   return (
     <WebView
       ref={webviewRef}
@@ -139,18 +215,13 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
     flexDirection: 'row',
+    backgroundColor: '#e7f5ff',
   },
   loadingContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loadingHeader: {
-    color: 'black',
-    fontSize: 20,
-  },
-  loadingText: {
-    color: 'black',
+    backgroundColor: '#e7f5ff',
   },
   lottie: {
     width: 300,

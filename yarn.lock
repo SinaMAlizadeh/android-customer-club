@@ -5254,6 +5254,11 @@ react-is@^16.7.0:
 react-is@^17.0.1:
   version "17.0.2"
 
+react-native-contacts@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/react-native-contacts/-/react-native-contacts-8.0.0.tgz"
+  integrity sha512-+jI5IsUxpOGlxb1LFnWnAKs7//4T7zLJI5JYuPuDKyxv3F8xsEe7O95HkZCfpBKL+tL8WBsx1HGe3UfLkZj2dA==
+
 react-native-device-info@^11.1.0:
   version "11.1.0"
   resolved "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-11.1.0.tgz"
