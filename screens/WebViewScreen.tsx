@@ -252,12 +252,61 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     getToken();
   }, [mutate]);
 
+  const [urlToLoad, setUrlToLoad] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleDeepLink = (event: {url: string}) => {
+      const url = event.url;
+      console.log(url);
+
+      const getQueryParams = (url: string) => {
+        const queryString = url.split('?')[1];
+        const pairs = queryString ? queryString.split('&') : [];
+        const params: {[key: string]: string} = {};
+        pairs.forEach(pair => {
+          const [key, value] = pair.split('=');
+          params[decodeURIComponent(key)] = decodeURIComponent(value);
+        });
+        return params;
+      };
+      // Extract the desired URL from the deep link
+      const params = getQueryParams(url);
+      const transactionId = params['transactionId'];
+      const redirectUrl = `https://app.padix.ir/dashboard/factor/${transactionId}`;
+      console.log(redirectUrl);
+      // Set the URL to load in the WebView
+      setUrlToLoad(redirectUrl);
+      // Post message to WebView to change the route
+      webviewRef.current?.postMessage(
+        JSON.stringify({
+          type: 'changeRoute',
+          route: `/dashboard/factor/${transactionId}`,
+        }),
+      );
+    };
+
+    // Add event listener for deep linking
+    const linkingListener = Linking.addEventListener('url', handleDeepLink);
+
+    // Handle the initial deep link if the app was opened by the URL
+    Linking.getInitialURL().then(url => {
+      if (url) {
+        handleDeepLink({url});
+      }
+    });
+
+    return () => {
+      // Clean up the event listener
+      linkingListener.remove();
+    };
+  }, []);
+
   const url = `https://app.padix.ir/auth/login?platform=android&fcm=${fcm}&imie=${imie}`;
 
   return (
     <WebView
       ref={webviewRef}
-      source={{uri: url}}
+      source={{uri: urlToLoad ? urlToLoad : url}}
       cacheEnabled={false}
       cacheMode="LOAD_NO_CACHE"
       originWhitelist={['*']}
