@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import Contacts from 'react-native-contacts'; // Import contacts
+
 import {getUniqueId} from 'react-native-device-info';
 import {
   WebView,
@@ -22,6 +23,7 @@ import {
 } from 'react-native-webview';
 import {useUpdateInfo} from '../services/fcm/hooks/useUpdateInfo';
 import {RootStackParamList} from '../type';
+import Geolocation from 'react-native-geolocation-service';
 
 type WebViewScreenRouteProp = RouteProp<RootStackParamList, 'WebView'>;
 type WebViewScreenNavigationProp = StackNavigationProp<
@@ -134,11 +136,68 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     }
   };
 
+  // Request Location Permission
+  const requestLocationPermission = async (): Promise<boolean> => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'دسترسی مکان',
+            message: 'برای دسترسی به لوکیشن خود لطفا دسترسی لازم را بدهید.',
+            buttonNeutral: 'بعدا سوال کنید',
+            buttonNegative: 'خیر',
+            buttonPositive: 'دسترسی میدم',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Location permission granted');
+          return true;
+        } else {
+          console.log('Location permission denied');
+          Alert.alert(
+            'Permission Denied',
+            'Cannot access location without permission.',
+          );
+          return false;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true; // iOS automatically handles permissions
+    }
+  };
+
+  // Fetch User Location
+  const fetchLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (hasPermission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position.coords;
+          console.log('User Location:', latitude, longitude);
+          // Inject location data into the WebView
+          webviewRef.current?.injectJavaScript(`
+          window.handleLocation(${JSON.stringify({latitude, longitude})});
+        `);
+        },
+        error => {
+          console.log('Error fetching location', error);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    }
+  };
+
   const onMessage = async (event: WebViewMessageEvent) => {
     const messageData = event.nativeEvent.data;
 
     if (messageData === 'getContacts') {
       await fetchContacts();
+    } else if (messageData === 'getLocation') {
+      await fetchLocation();
     } else {
       Linking.openURL(messageData).catch(err => {
         Alert.alert('Error', 'Failed to open URL: ' + err.message);
@@ -161,6 +220,11 @@ const WebViewScreen: React.FC<Props> = ({route, navigation}) => {
     // Listen for getContacts event from WebView
     document.addEventListener('getContacts', function() {
       window.ReactNativeWebView.postMessage('getContacts');
+    });
+
+    // Listen for getLocation event from WebView
+    document.addEventListener('getLocation', function() {
+       window.ReactNativeWebView.postMessage('getLocation');
     });
   `;
 
