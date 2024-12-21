@@ -2,6 +2,9 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
        <domain includeSubdomains="true">130.185.78.214</domain>
+       <domain includeSubdomains="true">https://api.padix.ir</domain>
+       <domain includeSubdomains="true">api.padix.ir</domain>
+       <domain includeSubdomains="true">app.padix.ir</domain>
        <domain includeSubdomains="true">10.0.2.2</domain>
        <domain includeSubdomains="true">localhost</domain>
     </domain-config>
